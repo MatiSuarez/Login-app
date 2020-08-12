@@ -23,7 +23,7 @@ export default function About() {
       <Grid.Row>
         <Grid.Column>
           <div style={styles.box}>
-            <h3> Recuperar contraseña para poder ingresar a la página </h3>
+            <h3> Recupera tú contraseña para ingresar a la página </h3>
 
             <Divider horizontal inverted>
               {" "}

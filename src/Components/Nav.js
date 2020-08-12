@@ -1,48 +1,38 @@
-import React from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { Input, Menu } from "semantic-ui-react";
 
-export default function Nav() {
-  const Token = localStorage.getItem("Token");
-  const tokenParse = JSON.parse(Token);
+export default class Nav extends Component {
+  state = { activeItem: "home" };
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
-  const logout = {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer " + tokenParse,
-    },
-  };
-  const handleClickLogout = () => {
-    localStorage.removeItem("Token");
-  };
-  return (
-    <div>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav">
-            <li className="nav-item active">
-              <Link to="/home">
-                <a className="nav-link" href="#">
-                  Home <span className="sr-only"></span>
-                </a>
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/login">
-                <a className="nav-link" href="#">
-                  Login
-                </a>
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/about">
-                <a className="nav-link" href="#">
-                  About
-                </a>
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </div>
-  );
+  render() {
+    const { activeItem } = this.state;
+
+    return (
+      <Menu secondary>
+        <Menu.Item
+          name="home"
+          active={activeItem === "home"}
+          onClick={this.handleItemClick}
+        >
+          <Link to="/home">Home</Link>
+        </Menu.Item>
+        <Menu.Item
+          name="login"
+          active={activeItem === "login"}
+          onClick={this.handleItemClick}
+        >
+          <Link to="/login">Login</Link>
+        </Menu.Item>
+        <Menu.Item
+          name="about"
+          active={activeItem === "about"}
+          onClick={this.handleItemClick}
+        >
+          <Link to="/about">About</Link>
+        </Menu.Item>
+      </Menu>
+    );
+  }
 }
