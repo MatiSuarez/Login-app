@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Grid, Divider, Form, Button, Icon } from "semantic-ui-react";
 
 const styles = {
@@ -18,6 +18,47 @@ const styles = {
 };
 
 export default function Home() {
+  const Token = localStorage.getItem("Token");
+  const tokenParse = JSON.parse(Token);
+
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const data = JSON.stringify({
+    name: user.name,
+    email: user.email,
+    password: user.password,
+  });
+
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: data,
+  };
+  const HandleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(
+        "https://redis-auth.herokuapp.com/auth/register",
+        options
+      );
+      const datos = await res.json();
+      console.log(datos);
+    } catch (error) {}
+  };
+
+  const HandleChange = (e) => {
+    setUser({
+      ...user,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   return (
     <Grid columns={3} centered verticalAlign="middle" style={styles.grid}>
       <Grid.Row>
@@ -32,28 +73,27 @@ export default function Home() {
             </Divider>
 
             <Form>
-              <Form.Field>
-                <Form.Input placeholder="user name" />
+              <Form.Field onChange={HandleSubmit}>
+                <Form.Input
+                  onChange={HandleChange}
+                  placeholder="user name"
+                  value={user.name}
+                />
               </Form.Field>
 
               <Form.Field>
                 <Form.Input
+                  onChange={HandleChange}
                   placeholder="email"
-                  icon={<Icon name="check circle" color="green" />}
+                  value={user.email}
                 />
               </Form.Field>
 
               <Form.Field>
                 <Form.Input
+                  onChange={HandleChange}
                   placeholder="password"
-                  icon={<Icon name="remove circle" color="red" />}
-                />
-              </Form.Field>
-
-              <Form.Field>
-                <Form.Input
-                  placeholder="repeat password"
-                  icon={<Icon name="remove circle" color="red" />}
+                  value={user.password}
                 />
               </Form.Field>
 
